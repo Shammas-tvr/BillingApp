@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FileText, User, Phone, DollarSign, Percent, Receipt } from "lucide-react";
+import axiosInstance from "../api/axios";
 
 function InvoiceGenerator() {
   const [customerName, setCustomerName] = useState("");
@@ -14,10 +15,23 @@ function InvoiceGenerator() {
     const taxAmt = parseFloat(tax) || 0;
     return sub - disc + taxAmt;
   };
+  const handleGeneratePDF = async () => {
+    try {
+      const response = await axiosInstance.post("/api/invoices/", {
+        customer_name: customerName,
+        customer_contact: customerContact,
+        subtotal: subtotal,
+        discount: discount,
+        tax: tax,
+      });
 
-  const handleGeneratePDF = () => {
-    alert("PDF generation feature coming soon! 🚀");
+      alert(`Invoice saved! Total: ₹${response.data.total}`);
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+      alert("Something went wrong");
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
