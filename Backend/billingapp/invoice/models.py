@@ -17,6 +17,8 @@ class Invoice(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
 
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    invoice_file = models.FileField(upload_to="invoices/",null=True,blank=True)
+
 
     def save(self, *args, **kwargs):
         # Backend is the boss of money

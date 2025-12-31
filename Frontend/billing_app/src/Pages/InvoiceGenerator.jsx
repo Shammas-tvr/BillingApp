@@ -20,17 +20,24 @@ function InvoiceGenerator() {
       const response = await axiosInstance.post("/api/invoices/", {
         customer_name: customerName,
         customer_contact: customerContact,
-        subtotal: subtotal,
-        discount: discount,
-        tax: tax,
+        subtotal,
+        discount,
+        tax,
       });
 
-      alert(`Invoice saved! Total: ₹${response.data.total}`);
+      const pdfUrl = response.data.pdf_url;
+
+      // IMPORTANT: use backend base URL
+      const fullUrl = `http://127.0.0.1:8000${pdfUrl}`;
+
+      window.open(fullUrl, "_blank");
+
     } catch (error) {
-      console.error(error.response?.data || error.message);
-      alert("Something went wrong");
+      alert("Invoice generation failed");
     }
   };
+
+
 
 
   return (
